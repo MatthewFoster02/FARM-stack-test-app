@@ -1,2 +1,5 @@
 # Personal keys
 /src/backend/private_keys/db_consts.txt
+
+# Environments
+.env
