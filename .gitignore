@@ -132,4 +132,4 @@ dmypy.json
 .pyre/
 
 # Personal keys
-db_consts.txt
+/src/backend/db_consts.txt
