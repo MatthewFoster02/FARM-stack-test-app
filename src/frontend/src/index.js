@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Car from './components/pages/Car';
-import NewCar from './components/pages/NewCar';
-import Cars from './components/pages/Cars';
-import About from './components/pages/About';
+import Car from './pages/Car';
+import NewCar from './pages/NewCar';
+import Cars from './pages/Cars';
 import './index.css';
 import App from './App';
 
@@ -18,7 +17,6 @@ root.render(
         <Route path='cars' element={<Cars />} />
         <Route path='cars/new' element={<NewCar />} />
         <Route path='cars/:id' element={<Car />} />
-        <Route path='about' element={<About />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
