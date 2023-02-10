@@ -13,17 +13,18 @@ async def register(request:Request, newUser:UserBase=Body(...)) -> UserBase:
     newUser.password = authorization.get_password_hash(newUser.password)
     newUser = jsonable_encoder(newUser)
 
-    if check_existing_fields('email', request, newUser):
+    if await check_existing_fields('email', request, newUser):
         raise HTTPException(status_code=409, detail=f"User with email {newUser['email']} already exists")
-    if check_existing_fields('username', request, newUser):
+    if await check_existing_fields('username', request, newUser):
         raise HTTPException(status_code=409, detail=f"User with username {newUser['username']} already exists")
     
     user = await request.app.mongodb['users'].insert_one(newUser)
     created_user = await request.app.mongodb['users'].find_one({'_id': user.inserted_id})
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_user)
 
-async def check_existing_fields(field:str, request:Request, newUser:UserBase=Body(...)) -> bool:
+async def check_existing_fields(field:str, request:Request, newUser:dict) -> bool:
     field_exists = await request.app.mongodb['users'].find_one({field: newUser[field]})
+    print(field_exists)
     return field_exists is not None
 
 @router.post('/login', response_description='Login user')
