@@ -1,7 +1,7 @@
 from pydantic import Field
 from typing import Optional
 
-from base_model import MongoBaseModel
+from models.base_model import MongoBaseModel
 
 class CarBase(MongoBaseModel):
     brand: str = Field(...)

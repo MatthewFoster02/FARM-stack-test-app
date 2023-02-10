@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import Field, validator, EmailStr, BaseModel
 from email_validator import validate_email, EmailNotValidError
-from base_model import MongoBaseModel
+from models.base_model import MongoBaseModel
 
 class Role(str, Enum):
     SALESPERSON = 'SALESPERSON'
