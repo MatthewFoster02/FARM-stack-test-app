@@ -6,6 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 # Import all sub-routes and rename to specific route
 from routers.cars import router as cars_router
+from routers.users import router as users_router
 
 DB_URL = config('DB_URL', cast=str)
 DB_NAME = config('DB_NAME', cast=str)
@@ -19,7 +20,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
 app.include_router(cars_router, prefix='/cars', tags=['cars'])
+app.include_router(users_router, prefix='/users', tags=['users'])
 
 @app.on_event('startup')
 async def startup_db_client():
