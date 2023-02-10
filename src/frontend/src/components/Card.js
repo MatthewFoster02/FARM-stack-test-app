@@ -8,7 +8,7 @@ const Card = ({car}) => {
                 <div className='font-bold text-center text-lg text-FarmNavy'><span className='text-FarmLime'>{brand}</span> {make}</div>
 
                 <div>Year: {year}</div>
-                <div>Price: <span className='font-semibold text-orange-600'>{price}</span></div>
+                <div>Price: <span className='font-semibold text-orange-600'>€{price}</span></div>
                 <div>Km: {km}</div>
                 <div>Engine: {cm3}cm3</div>
             </div>
