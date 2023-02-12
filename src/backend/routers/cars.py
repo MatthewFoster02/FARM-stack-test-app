@@ -16,7 +16,8 @@ async def list_all_cars(
     max_price:int=100000,
     brand:Optional[str]=None,
     page:int=1,
-    results_per_page:int=25
+    results_per_page:int=25,
+    userID=Depends(authorization.auth_wrapper)
     ) -> List[CarDB]: # Default parameters, type hinting that return will be List of cars
     skip = (page - 1) * results_per_page
     query = {
