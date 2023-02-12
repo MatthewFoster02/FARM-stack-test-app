@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth.js';
 
 const Login = () => {
     const [apiError, setApiError] = useState();
-    const setAuth = useAuth();
+    const {setAuth} = useAuth();
     let navigate = useNavigate();
 
     const {
@@ -61,7 +61,7 @@ const Login = () => {
 
     return (
         <div className='mx-auto p-10 rounded-lg shadow-2xl'>
-            <h2 className='text-xl text-center font-bold my-2'>
+            <h2 className='text-xl text-primary text-center font-bold my-2'>
                 Login page
             </h2>
 
