@@ -38,6 +38,7 @@ const Header = () => {
                     {/* <li className="mx1"><Link to='/admin'>Admin</Link></li>
                     <li className="mx1"><Link to='/'></Link></li>
                     <li className="mx1"><Link to='/'></Link></li> */}
+                    <li className="mx1"><Link to='/cars'>Cars</Link></li>
                     {
                         auth?.username && <li className="mx-1">
                             <button className="btn-warning" onClick={logout}>

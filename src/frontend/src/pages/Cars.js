@@ -21,6 +21,7 @@ const Cars = () =>
             }
         }).then(res => res.json()).then(data =>
         {
+            console.log(data);
             setCars(data);
         });
         setIsPending(false);

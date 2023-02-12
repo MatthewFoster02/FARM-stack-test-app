@@ -27,7 +27,7 @@ async def list_all_cars(
     if brand:
         query['brand'] = brand
     
-    full_query = request.app.mongodb['cars3'].find(query).sort('_id', 1).skip(skip).limit(results_per_page)
+    full_query = request.app.mongodb['cars2'].find(query).sort('_id', 1).skip(skip).limit(results_per_page)
     results = [CarDB(**raw_car) async for raw_car in full_query]
     return results
 
@@ -35,13 +35,13 @@ async def list_all_cars(
 async def create_car(request:Request, car:CarBase=Body(...), userID=Depends(authorization.auth_wrapper)):
     car = jsonable_encoder(car)
     car['owner'] = userID
-    new_car = await request.app.mongodb['cars3'].insert_one(car)
-    created_car = await request.app.mongodb['cars3'].find_one({'_id': new_car.inserted_id})
+    new_car = await request.app.mongodb['cars2'].insert_one(car)
+    created_car = await request.app.mongodb['cars2'].find_one({'_id': new_car.inserted_id})
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_car)
 
 @router.get('/{id}', response_description='Get single car by ID')
 async def get_car_by_ID(id:str, request:Request) -> CarDB:
-    car = await request.app.mongodb['cars3'].find_one({'_id': id})
+    car = await request.app.mongodb['cars2'].find_one({'_id': id})
 
     if car is not None:
         return CarDB(**car)
@@ -53,11 +53,11 @@ async def update_car(id:str, request:Request, car:CarUpdate=Body(...), userID=De
     # Check user authorized to update car
     await checkOwnerOrAdmin(id, request, userID)
 
-    await request.app.mongodb['cars3'].update_one(
+    await request.app.mongodb['cars2'].update_one(
         {'_id': id}, {'$set': car.dict(exclude_unset=True)}
     )
 
-    car = await request.app.mongodb['cars3'].find_one({'_id': id})
+    car = await request.app.mongodb['cars2'].find_one({'_id': id})
 
     if car is not None:
         return CarDB(**car)
@@ -69,7 +69,7 @@ async def delete_car(id:str, request:Request, userID=Depends(authorization.auth_
     # Check user authorized to update car
     await checkOwnerOrAdmin(id, request, userID)
 
-    delete_result = await request.app.mongodb['cars3'].delete_one({'_id': id})
+    delete_result = await request.app.mongodb['cars2'].delete_one({'_id': id})
 
     if delete_result.deleted_count == 1:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -79,7 +79,7 @@ async def delete_car(id:str, request:Request, userID=Depends(authorization.auth_
 async def checkOwnerOrAdmin(id:str, request:Request, userID:str):
     # Get user using userID and car using id
     user = await request.app.mongodb['users'].find_one({'_id': userID})
-    car_to_update = await request.app.mongodb['cars3'].find_one({'_id': id})
+    car_to_update = await request.app.mongodb['cars2'].find_one({'_id': id})
 
     # Check that owner of car is user or user is admin
     if(userID != car_to_update['owner'] and user['role'] != 'ADMIN'):
