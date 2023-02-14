@@ -7,6 +7,7 @@ import RequireAuthentication from "./components/RequireAuthentication";
 import Cars from "./pages/Cars";
 import NewCar from "./pages/NewCar";
 import Car from "./pages/Car";
+import NotFound from "./pages/NotFound";
 
 function App() 
 {
@@ -21,6 +22,7 @@ function App()
 					<Route path="cars/new" element={<NewCar />} />
 					<Route path="cars/:id" element={<Car />} />
 				</Route>
+				<Route path="*" element={<NotFound/>} />
 			</Route>
 		</Routes>
 	);
