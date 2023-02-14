@@ -66,7 +66,7 @@ async def get_car_by_ID(id:str, request:Request) -> CarDB:
     
     raise HTTPException(status_code=404, detail=f"Car with id: {id} not found")
 
-@router.patch('/{id}', response_description='Update car')
+@router.patch('/{id}', response_description='Update car with ID')
 async def update_car(id:str, request:Request, car:CarUpdate=Body(...), userID=Depends(authorization.auth_wrapper)):
     # Check user authorized to update car
     await checkOwnerOrAdmin(id, request, userID)
@@ -82,7 +82,7 @@ async def update_car(id:str, request:Request, car:CarUpdate=Body(...), userID=De
 
     raise HTTPException(status_code=404, detail=f"Car with id: {id} not found")
 
-@router.delete('/{id}', response_description='Delete car')
+@router.delete('/{id}', response_description='Delete car with ID')
 async def delete_car(id:str, request:Request, userID=Depends(authorization.auth_wrapper)):
     # Check user authorized to update car
     await checkOwnerOrAdmin(id, request, userID)
