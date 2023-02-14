@@ -4,6 +4,8 @@ import useAuth from '../hooks/useAuth.js';
 
 import FormInput from "../components/FormInput";
 
+let baseURL = 'https://fastapi-test2.onrender.com/cars';
+
 const NewCar = () => {
     const { auth } = useAuth();
 
@@ -82,7 +84,7 @@ const NewCar = () => {
 
     const addCar = async (newCar) =>
     {
-        const response = await fetch('http://localhost:8000/cars/', {
+        const response = await fetch(`${baseURL}/`, {
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import useAuth from '../hooks/useAuth.js';
 
+let baseURL = 'https://fastapi-test2.onrender.com/cars';
+
 
 const Car = () => {
     const { auth } = useAuth();
@@ -21,7 +23,7 @@ const Car = () => {
 
     const getCar = async() =>
     {
-        const res = await fetch(`http://localhost:8000/cars/${id}`);
+        const res = await fetch(`${baseURL}/${id}`);
         if(!res.ok)
         {
             setApiError('Error fetching car');
@@ -37,7 +39,7 @@ const Car = () => {
 
     const deleteCar = async() =>
     {
-        const res = await fetch(`http://localhost:8000/cars/${id}`, 
+        const res = await fetch(`${baseURL}/${id}`, 
         {
             method: 'DELETE',
             headers: {
@@ -61,7 +63,7 @@ const Car = () => {
 
     const updatePrice = async() =>
     {
-        const res = await fetch(`http://localhost:8000/cars/${id}`,
+        const res = await fetch(`${baseURL}/${id}`,
         {
             method: 'PATCH',
             headers: {

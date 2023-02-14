@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth.js';
 
+let baseURL = 'https://fastapi-test2.onrender.com/users';
+
 const Login = () => {
     const [apiError, setApiError] = useState();
     const {setAuth} = useAuth();
@@ -14,7 +16,7 @@ const Login = () => {
 
     const onFormSubmit = async (data) =>
     {
-        const res = await fetch('http://localhost:8000/users/login', 
+        const res = await fetch(baseURL + '/login', 
         {
             method: 'POST',
             headers: {
@@ -40,7 +42,7 @@ const Login = () => {
 
     const getUserData = async (token) =>
     {
-        const res = await fetch('http://localhost:8000/users/me',
+        const res = await fetch(baseURL + '/me',
         {
             method: 'GET',
             headers: {

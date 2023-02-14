@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import useAuth from "../hooks/useAuth";
 
+let baseURL = 'https://fastapi-test2.onrender.com/cars';
 
 const Cars = () => 
 {
@@ -15,7 +16,7 @@ const Cars = () =>
 
     useEffect(() =>
     {
-        fetch('http://localhost:8000/cars/brands').then(res => res.json()).then(data =>
+        fetch(baseURL + '/brands').then(res => res.json()).then(data =>
         {
             setAllBrands(data['brands']);
         });
@@ -23,7 +24,7 @@ const Cars = () =>
 
     useEffect(() =>
     {
-        fetch(`http://localhost:8000/cars/pages?brand=${brand}`).then(res => res.json()).then(data =>
+        fetch(`${baseURL}/pages?brand=${brand}`).then(res => res.json()).then(data =>
         {
             setTotalPages(data['pages']);
         });
@@ -32,7 +33,7 @@ const Cars = () =>
 
     useEffect(() =>
     {
-        fetch(`http://localhost:8000/cars?page=${page}&brand=${brand}`,
+        fetch(`${baseURL}?page=${page}&brand=${brand}`,
         {
             method: 'GET',
             headers: {
