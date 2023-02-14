@@ -72,19 +72,19 @@ const Cars = () =>
         <div className="grid">
             <h2 className="text-xl text-primary text-center font-bold my-5">Cars - {brand ? brand : 'All Brands'}</h2>
             
-            <div className="dropdown dropdown-right">
-                <label tabIndex="0" className="btn m-1">Choose a brand:</label>
-                    <ul tabIndex="0" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a onClick={() => onChangeBrand('')}>All Brands</a></li>
+            <div className="dropdown dropdown-hover">
+                <label tabIndex={0} className="btn m-1">Filter by Brand</label>
+                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a onClick={() => onChangeBrand('')}>All Brands</a></li>
+                    {
+                        allBrands && allBrands.map((brand) =>
                         {
-                            allBrands && allBrands.map((brand) =>
-                            {
-                                return (
-                                    <li key={brand}><a onClick={() => onChangeBrand(brand)}>{brand}</a></li>
-                                )
-                            })
-                        }
-                    </ul>
+                            return (
+                                <li key={brand}><a onClick={() => onChangeBrand(brand)}>{brand}</a></li>
+                            )
+                        })
+                    }
+                </ul>
             </div>
             {
                 isPending && <div>
