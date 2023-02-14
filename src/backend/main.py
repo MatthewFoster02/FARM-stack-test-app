@@ -12,10 +12,15 @@ DB_URL = config('DB_URL', cast=str)
 DB_NAME = config('DB_NAME', cast=str)
 COLLECTION_NAME = config('COLLECTION_NAME', cast=str)
 
+# Define allowed origins
+origins = [
+    '*'
+]
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']

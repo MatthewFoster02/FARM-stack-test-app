@@ -24,7 +24,6 @@ async def register(request:Request, newUser:UserBase=Body(...)) -> UserBase:
 
 async def check_existing_fields(field:str, request:Request, newUser:dict) -> bool:
     field_exists = await request.app.mongodb['users'].find_one({field: newUser[field]})
-    print(field_exists)
     return field_exists is not None
 
 @router.post('/login', response_description='Login user')
