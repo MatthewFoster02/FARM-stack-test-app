@@ -21,11 +21,10 @@ const Cars = () =>
             }
         }).then(res => res.json()).then(data =>
         {
-            console.log(data);
             setCars(data);
         });
         setIsPending(false);
-    }, [brand]);
+    }, [brand, auth.token]);
 
     const onChangeBrand = (e) =>
     {

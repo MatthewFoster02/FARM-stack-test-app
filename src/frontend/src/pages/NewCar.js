@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from '../hooks/useAuth.js';
 
-import Layout from "../components/Layout";
 import FormInput from "../components/FormInput";
 
 const NewCar = () => {
+    const { auth } = useAuth();
+
     const emptyCar = {
         "brand":"",
         "make":"",
@@ -83,7 +85,8 @@ const NewCar = () => {
         const response = await fetch('http://localhost:8000/cars/', {
             method:'POST',
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`
             },
             body: JSON.stringify(newCar)
         });
@@ -106,7 +109,7 @@ const NewCar = () => {
     }
 
     return (
-        <Layout>
+        <div>
             <div>
                 <h1 className="text-center text-lg my-2 font-mono font-semibold">Insert a New Car</h1>
             </div>
@@ -121,25 +124,27 @@ const NewCar = () => {
                     }
                 </ul>
             }
-            <div className="flex flex-row align-middle justify-center">
+            <div className="flex flex-row justify-center">
                 <form onSubmit={handleSubmit}>
                     {
                         inputs.map((input) =>
                         (
-                            <FormInput 
+                            <FormInput
                                 key={input.id}
                                 name={input.name}
-                                {...input} 
+                                {...input}
                                 value={newCar[input.name]}
                                 onChange={onChange}
                                 required />
                         ))
                     }
-                    <button type="submit" onClick={handleSubmit} className="bg-yellow-500 m-2 w-full text-white rounded-md">Insert</button>
-                    <button type="reset" onClick={handleReset} className="bg-black m-2 w-full text-white rounded-md">Reset</button>
+                    <div className="flex justify-between">
+                        <button type="submit" onClick={handleSubmit} className="btn btn-outline btn-success m-3">Insert</button>
+                        <button type="reset" onClick={handleReset} className="btn btn-outline btn-error m-3">Reset</button>
+                    </div>
                 </form>
             </div>
-        </Layout>
+        </div>
     );
 }
 

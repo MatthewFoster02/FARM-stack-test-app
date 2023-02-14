@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
 import FormInput from "../components/FormInput";
+import useAuth from '../hooks/useAuth.js';
+
 
 const Car = () => {
+    const { auth } = useAuth();
     const {id} = useParams();
     const navigate = useNavigate();
     const [car, setCar] = useState(null);
@@ -38,7 +40,8 @@ const Car = () => {
         {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'aplication/json'
+                'Content-Type': 'aplication/json',
+                Authorization: `Bearer ${auth.token}`
             }
         });
 
@@ -64,7 +67,8 @@ const Car = () => {
         {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`
             },
             body: JSON.stringify({price})
         });
@@ -91,7 +95,7 @@ const Car = () => {
     }, []);
 
     return (
-        <Layout>
+        <div>
             {
                 isPending && <div className="bg-red-500 w-full text-white h-10 text-lg">
                     <h2>Loadingcar...</h2>
@@ -114,31 +118,32 @@ const Car = () => {
                             {car.brand} {car.make}
                         </div>
                         <div className="max-w-xl">
-                            <img alt="A car!" src="https://via.placeholder.com/960x550.png?text=IMAGINE+A+CAR!" />
+                            <img alt="A car!" src="https://api.lorem.space/image/car?w=400&h=225" />
                         </div>
                         <div className="flex flex-col items-center font-normal text-lg">
-                            <div>Price: <span className="font-semibold text-orange-600 text-xl">€{car.price}</span></div>
+                            <div>Price: <span className="text-primary font-extrabold">€{car.price}</span></div>
                             <div>Year: {car.year}</div>
                             <div>Km: {car.km}</div>
                         </div>
-
                         <div className="flex flex-row">
-                            <FormInput 
-                                label='change price'
+                            <FormInput
+                                label='Change Price'
                                 placeholder={price}
                                 type="number"
                                 value={price}
                                 onChange={onPriceChange}
                                 required />
-                            
-                            <button className="bg-yellow-500 text-white p-2 rounded-md m-3 transition-opacity hover:opacity-80" onClick={updatePrice}>Update Price</button>
-                            <button className="bg-red-700 text-white p-2 rounded-md m-3 transition-opacity hover:opacity-80" onClick={deleteCar}>Delete Car</button>
+            
+                        </div>
+                        <div className="flex justify-between">
+                            <button className="btn btn-outline btn-warning m-3" onClick={updatePrice}>Update Price</button>
+                            <button className="btn btn-outline btn-error m-3" onClick={deleteCar}>Delete Car</button>
                         </div>
                         <p>Warning: Deletion is PERMANENT!</p>
                     </div>
                 </div>
             }
-        </Layout>
+        </div>
     );
 }
 

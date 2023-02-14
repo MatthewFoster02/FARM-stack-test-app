@@ -17,7 +17,7 @@ const Header = () => {
         <div className="navbar bg-primary text-primary-content">
             <div className="flex-1">
                 <Link className="btn btn-ghost normal-case text-xl" to='/'>Cars</Link>
-                <span className="border-2 border-amber-500 p-1">
+                <span className="border-2 border-amber-500 p-1 rounded-lg">
                     {
                         auth?.username ? `Logged in as ${auth?.username} - ${auth.role}` : 'Not logged in'
                     }
@@ -35,10 +35,8 @@ const Header = () => {
                             <Link to='/register'>Register</Link>
                         </li>
                     }
-                    {/* <li className="mx1"><Link to='/admin'>Admin</Link></li>
-                    <li className="mx1"><Link to='/'></Link></li>
-                    <li className="mx1"><Link to='/'></Link></li> */}
                     <li className="mx1"><Link to='/cars'>Cars</Link></li>
+                    <li className="mx1"><Link to='/cars/new'>Add Car</Link></li>
                     {
                         auth?.username && <li className="mx-1">
                             <button className="btn-warning" onClick={logout}>

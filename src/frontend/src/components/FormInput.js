@@ -4,7 +4,7 @@ const FormInput = (props) => {
         <div className="formInput my-2 flex flex-row items-center">
             <label className="font-small">{label}</label>
             <input
-                className="p-1 mx-1 rounded-md border-2 border-gray-300 flex-1"
+                className="input input-bordered input-accent w-full max-w-xs m-3"
                 placeholder={placeholder}
                 type={type}
                 name={name}
