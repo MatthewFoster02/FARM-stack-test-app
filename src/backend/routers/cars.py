@@ -2,12 +2,15 @@ from fastapi import APIRouter, Request, Body, status, HTTPException, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from typing import Optional, List
+import math
 
 from models.cars import CarBase, CarDB, CarUpdate
 from authentication import Authorization
 
 router = APIRouter()
 authorization = Authorization()
+
+RESULTS_PER_PAGE = 20
 
 @router.get('/', response_description='List all cars')
 async def list_all_cars(
@@ -16,9 +19,10 @@ async def list_all_cars(
     max_price:int=100000,
     brand:Optional[str]=None,
     page:int=1,
-    results_per_page:int=25,
+    results_per_page:int=RESULTS_PER_PAGE,
     userID=Depends(authorization.auth_wrapper)
     ) -> List[CarDB]: # Default parameters, type hinting that return will be List of cars
+    RESULTS_PER_PAGE = results_per_page
     skip = (page - 1) * results_per_page
     query = {
         'price': {'$lt': max_price, '$gt': min_price}
@@ -30,6 +34,20 @@ async def list_all_cars(
     full_query = request.app.mongodb['cars2'].find(query).sort('_id', 1).skip(skip).limit(results_per_page)
     results = [CarDB(**raw_car) async for raw_car in full_query]
     return results
+
+@router.get('/brands', response_description='Get all unique brands')
+async def unique_brands(request:Request) -> List[str]:
+    brands = await request.app.mongodb['cars2'].distinct('brand')
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"brands": brands})
+
+@router.get('/pages', response_description='Get total pages')
+async def page_total(request:Request, brand:Optional[str]=None):
+    query = {}
+    if brand:
+        query['brand'] = brand
+    doc_count = await request.app.mongodb['cars2'].count_documents(query)
+    pages_total = math.ceil(doc_count / RESULTS_PER_PAGE)
+    return JSONResponse(status_code=status.HTTP_200_OK, content={'pages': int(pages_total)})
 
 @router.post('/', response_description='Add new car')
 async def create_car(request:Request, car:CarBase=Body(...), userID=Depends(authorization.auth_wrapper)):
