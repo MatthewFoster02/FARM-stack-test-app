@@ -10,7 +10,8 @@ const Car = () => {
     const navigate = useNavigate();
     const [car, setCar] = useState(null);
     const [price, setPrice] = useState(null);
-    const [error, setError] = useState([]);
+    const [apiError, setApiError] = useState();
+    const [successful, setSuccessful] = useState();
     const [isPending, setIsPending] = useState(true);
 
     const onPriceChange = (e) =>
@@ -23,7 +24,7 @@ const Car = () => {
         const res = await fetch(`http://localhost:8000/cars/${id}`);
         if(!res.ok)
         {
-            setError('Error fetching car');
+            setApiError('Error fetching car');
         }
         else
         {
@@ -47,16 +48,13 @@ const Car = () => {
 
         if(!res.ok)
         {
-            const data = await res.json();
-            let errArray = data.detail.map(el =>
-            {
-                return `${el.loc[1]} -${el.msg}`;
-            });
-            setError(errArray);
+            const errorRes = await res.json();
+            setApiError(errorRes['detail']);
         }
         else 
         {
-            setError([]);
+            setApiError();
+            setSuccessful('Deletion successful');
             navigate('/cars');
         }
     }
@@ -73,18 +71,15 @@ const Car = () => {
             body: JSON.stringify({price})
         });
 
-        const data = await res.json();
         if(!res.ok)
         {
-            let errArray = data.detail.map(el =>
-            {
-                return `${el.loc[1]} -${el.msg}`;
-            });
-            setError(errArray);
+            const errorRes = await res.json();
+            setApiError(errorRes['detail']);
         }
         else
         {
-            setError([]);
+            setApiError();
+            setSuccessful('Update Successful');
             getCar();
         }
     }
@@ -97,19 +92,25 @@ const Car = () => {
     return (
         <div>
             {
-                isPending && <div className="bg-red-500 w-full text-white h-10 text-lg">
-                    <h2>Loadingcar...</h2>
+                apiError && <div class="alert alert-error shadow-lg">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>Error! {apiError}</span>
+                    </div>
                 </div>
             }
             {
-                error && <ul className="flex flex-col mx-auto text-center">
-                    {
-                        error && error.map((el, index) =>
-                        (
-                            <li key={index} className="my-2 p-1 border-2 border-red-700 max-w-md mx-auto">{el}</li>
-                        ))
-                    }
-                </ul>
+                successful && <div class="alert alert-success shadow-lg">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{successful}</span>
+                    </div>
+                </div>
+            }
+            {
+                isPending && <div className="bg-red-500 w-full text-white h-10 text-lg">
+                    <h2>Loadingcar...</h2>
+                </div>
             }
             {
                 car && <div>

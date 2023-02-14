@@ -39,7 +39,7 @@ const Header = () => {
                     <li className="mx1"><Link to='/cars/new'>Add Car</Link></li>
                     {
                         auth?.username && <li className="mx-1">
-                            <button className="btn-warning" onClick={logout}>
+                            <button className="btn-warning rounded-lg" onClick={logout}>
                                 Logout<span className="font-semibold">{auth?.username}</span>
                             </button>
                         </li>
