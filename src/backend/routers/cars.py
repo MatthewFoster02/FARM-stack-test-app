@@ -1,11 +1,26 @@
-from fastapi import APIRouter, Request, Body, status, HTTPException, Depends
+from io import BytesIO
+from fastapi import APIRouter, Request, Body, status, HTTPException, Depends, UploadFile, File, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from typing import Optional, List
+from decouple import config
+from PIL import Image, ImageOps
+import cloudinary
+import cloudinary.uploader
 import math
 
 from models.cars import CarBase, CarDB, CarUpdate
 from authentication import Authorization
+
+CLOUD_NAME = config("CLOUDINARY_NAME", cast=str)
+API_KEY = config("CLOUDINARY_KEY", cast=str)
+API_SECRET = config("CLOUDINARY_SECRET", cast=str)
+
+cloudinary.config(
+    cloud_name = CLOUD_NAME,
+    api_key = API_KEY,
+    api_secret = API_SECRET
+)
 
 router = APIRouter()
 authorization = Authorization()
@@ -22,7 +37,6 @@ async def list_all_cars(
     results_per_page:int=RESULTS_PER_PAGE,
     userID=Depends(authorization.auth_wrapper)
     ) -> List[CarDB]: # Default parameters, type hinting that return will be List of cars
-    RESULTS_PER_PAGE = results_per_page
     skip = (page - 1) * results_per_page
     query = {
         'price': {'$lt': max_price, '$gt': min_price}
@@ -49,10 +63,45 @@ async def page_total(request:Request, brand:Optional[str]=None):
     pages_total = math.ceil(doc_count / RESULTS_PER_PAGE)
     return JSONResponse(status_code=status.HTTP_200_OK, content={'pages': int(pages_total)})
 
-@router.post('/', response_description='Add new car')
-async def create_car(request:Request, car:CarBase=Body(...), userID=Depends(authorization.auth_wrapper)):
+@router.post('/', response_description='Add new car (with picture)')
+async def create_car(
+    request:Request,
+    brand:str=Form('brand'),
+    make:str=Form('make'),
+    year:int=Form('year'),
+    cm3:int=Form('cm3'),
+    price:int=Form('price'),
+    km:int=Form('km'),
+    picture:UploadFile=File(...),
+    userID=Depends(authorization.auth_wrapper)
+    ):
+
+    original_image = Image.open(picture.file)
+    poster_image = ImageOps.posterize(original_image, 2)
+    out_image = BytesIO()
+    poster_image.save(out_image, 'JPEG')
+    out_image.seek(0)
+
+    result = cloudinary.uploader.upload(
+        out_image,
+        folder='UsedCars',
+        crop='scale',
+        width=800
+    )
+
+    url = result.get('url')
+
+    car = CarDB(
+        brand=brand,
+        price=price,
+        cm3=cm3,
+        km=km,
+        make=make,
+        year=year,
+        picture=url,
+        owner=userID
+    )
     car = jsonable_encoder(car)
-    car['owner'] = userID
     new_car = await request.app.mongodb['cars2'].insert_one(car)
     created_car = await request.app.mongodb['cars2'].find_one({'_id': new_car.inserted_id})
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_car)
