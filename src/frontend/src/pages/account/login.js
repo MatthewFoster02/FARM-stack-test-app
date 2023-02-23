@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+import useAuth from "@/hooks/useAuth";
 
 const login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
+    const { setUser } = useAuth();
+    const router = useRouter();
 
     const handleSubmit = async (e) =>
     {
@@ -18,7 +22,17 @@ const login = () => {
             body: JSON.stringify({email, password})
         });
 
-        const data = await res.json();
+        if(!res.ok)
+        {
+            const errData = await res.json();
+            console.log(errData);
+            setError(errData);
+            return;
+        }
+
+        const user = await res.json();
+        setUser(user);
+        router.pathname('/');
     }
 
     return (

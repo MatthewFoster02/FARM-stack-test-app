@@ -1,12 +1,31 @@
 import cookie from 'cookie';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import useAuth from '@/hooks/useAuth';
 
-export default async (req, res) =>
+const logout = () =>
 {
-    res.status(200).setHeader('Set-Cookie', cookie.serialize('jwt', '',
+    const { user, setUser } = useAuth();
+    const removeCookie = async () =>
     {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'strict',
-        maxAge: -1
-    })).end()
+        const res = await fetch('http://localhost:3000/api/logout', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    const router = useRouter();
+
+    useEffect(() =>
+    {
+        removeCookie();
+        setUser(null);
+        router.push('/');
+    }, []);
+
+    return <></>;
 }
+export default logout;
