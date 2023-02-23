@@ -10,7 +10,7 @@ export default async (req, res) =>
     }
 
     const {email, password} = req.body;
-    const result = await fetch('http://localhost:8000/users/login',
+    const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`,
     {
         method: 'POST',
         headers: {

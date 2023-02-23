@@ -13,7 +13,7 @@ const login = () => {
     const handleSubmit = async (e) =>
     {
         e.preventDefault();
-        const res = await fetch('api/login',
+        const res = await fetch('/api/login',
         {
             method: 'POST',
             headers: {
@@ -32,7 +32,7 @@ const login = () => {
 
         const user = await res.json();
         setUser(user);
-        router.pathname('/');
+        router.push('/');
     }
 
     return (

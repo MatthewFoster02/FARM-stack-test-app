@@ -1,4 +1,3 @@
-import cookie from 'cookie';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAuth from '@/hooks/useAuth';
