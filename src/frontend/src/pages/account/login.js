@@ -13,7 +13,7 @@ const login = () => {
     const handleSubmit = async (e) =>
     {
         e.preventDefault();
-        const res = await fetch('/api/login',
+        const res = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/login`,
         {
             method: 'POST',
             headers: {
@@ -26,6 +26,7 @@ const login = () => {
         {
             const errData = await res.json();
             console.log('Error in Frontend');
+            console.log(email, password);
             console.log(errData);
             setError(errData);
             return;

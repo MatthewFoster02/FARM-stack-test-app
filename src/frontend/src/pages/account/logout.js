@@ -7,7 +7,7 @@ const logout = () =>
     const { user, setUser } = useAuth();
     const removeCookie = async () =>
     {
-        const res = await fetch('http://localhost:3000/api/logout', 
+        const res = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/logout`, 
         {
             method: 'POST',
             headers: {

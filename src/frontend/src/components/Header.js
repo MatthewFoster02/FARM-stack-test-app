@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const Header = () =>
 {
-    const { user, setUser, authError, setAuthError, loading, setLoading } = useAuth();
+    const { user, setUser, loading, setLoading } = useAuth();
 
     useEffect(() =>
     {
@@ -12,7 +12,7 @@ const Header = () =>
         (
             async () =>
             {
-                const userData = await fetch('/api/user');
+                const userData = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/user`);
                 try
                 {
                     const user = await userData.json();
