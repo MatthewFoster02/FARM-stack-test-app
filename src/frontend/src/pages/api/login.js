@@ -25,6 +25,8 @@ export default async (req, res) =>
         data['error'] = data['detail'];
         res.status(401);
         res.json(data);
+        console.log('Error in Frontend');
+        console.log(data['error']);
         return;
     }
 

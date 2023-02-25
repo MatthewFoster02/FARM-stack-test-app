@@ -25,6 +25,7 @@ const login = () => {
         if(!res.ok)
         {
             const errData = await res.json();
+            console.log('Error in Frontend');
             console.log(errData);
             setError(errData);
             return;
