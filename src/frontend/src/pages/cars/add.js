@@ -176,4 +176,4 @@ const add = ({jwt}) =>
         </div>
     );
 }
-export default Add;
+export default add;
