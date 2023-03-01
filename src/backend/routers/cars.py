@@ -77,9 +77,8 @@ async def create_car(
     ):
 
     original_image = Image.open(picture.file)
-    poster_image = ImageOps.posterize(original_image, 2)
     out_image = BytesIO()
-    poster_image.save(out_image, 'JPEG')
+    original_image.save(out_image, 'JPEG')
     out_image.seek(0)
 
     result = cloudinary.uploader.upload(

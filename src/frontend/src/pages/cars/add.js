@@ -35,17 +35,17 @@ const add = ({jwt}) =>
         formData.append('picutre', picture);
         setLoading(true);
 
+        console.log([...formData]);
         try
         {
             const response = await axios(
             {
                 method: 'POST',
-                url: `${process.env.NEXT_PUBLIC_WEB_URL}/cars/`,
-                data: formData,
+                url: `${process.env.NEXT_PUBLIC_API_URL}/cars/`,
                 headers: {
-                    'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${jwt}`
-                }
+                },
+                data: formData
             }
             );
         }
