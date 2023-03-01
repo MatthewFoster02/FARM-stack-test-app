@@ -30,6 +30,7 @@ export default async (req, res) =>
         return;
     }
 
+    console.log(data);
     const jwt = data.token;
     res.status(200).setHeader('Set-Cookie', cookie.serialize('jwt', jwt,
     {

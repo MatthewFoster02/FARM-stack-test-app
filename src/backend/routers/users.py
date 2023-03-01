@@ -34,7 +34,7 @@ async def login(request:Request, loginUser:LoginBase=Body(...)) -> str:
         raise HTTPException(status_code=401, detail='Invalid email and/or password')
     
     token = authorization.encode_token(user['_id'])
-    res = JSONResponse(content={'token': token})
+    res = JSONResponse(content={'user': user, 'token': token})
     return res
 
 @router.get('/me', response_description='Logged in user\'s data')

@@ -24,11 +24,11 @@ const login = () => {
 
         if(!res.ok)
         {
-            const errData = await res.json();
+            //const errData = await res.json();
             console.log('Error in Frontend');
             console.log(email, password);
-            console.log(errData);
-            setError(errData);
+            //console.log(errData);
+            //setError(errData);
             return;
         }
 
