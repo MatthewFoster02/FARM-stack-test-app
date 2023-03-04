@@ -43,6 +43,7 @@ const add = ({jwt}) =>
                 method: 'POST',
                 url: `${process.env.NEXT_PUBLIC_API_URL}/cars/`,
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${jwt}`
                 },
                 data: formData
